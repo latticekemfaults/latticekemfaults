@@ -1,4 +1,4 @@
-Software accompanying the paper "Fault Attacks on CCA-secure Lattice KEMs".
+Software accompanying the paper ["Fault Attacks on CCA-secure Lattice KEMs" (PDF)](https://eprint.iacr.org/2021/064.pdf). To appear at CHES 2021.
 
 Authors:
   - [Peter Pessl](https://pessl.cc): <peter@pessl.cc>
