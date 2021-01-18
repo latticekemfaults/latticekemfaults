@@ -32,7 +32,6 @@ store = false;
 
 %%
 
-addpath('ParforProgMon');
 
 if device
     repeats = 1;
@@ -228,7 +227,6 @@ for iter = 1:maxiterations
     noiserange = -r:r;
     
     fprintf('  1: Updating expected error distribution\n');
-    ppm = ParforProgMon('Progress ', numel(kgx));
     parfor k = 1:numel(kgx)%can be parallelized
         predshift = kgx{k}.kg*kgx{k}.l;
         kgx{k}.dist = zeros(numel(noiserange), numfaults);
@@ -236,9 +234,8 @@ for iter = 1:maxiterations
             subs = predshift(:, i) - noiserange(1) + 1;
             kgx{k}.dist(:, i) = accumarray(subs, kgx{k}.pkg, [numel(noiserange), 1]);
         end
-        ppm.increment(); %#ok<PFBNS>
     end
-    clear ppm k predshift i subs 
+    clear k predshift i subs 
     
     
     
@@ -446,6 +443,7 @@ for iter = 1:maxiterations
         histogram(rank, (1:numel(vals)+1)-0.5, 'normalization', 'probability');
         title('hist of key rank');
         ylim([0 1]);
+		drawnow;
     end
     
     if numerr == 0
@@ -468,6 +466,7 @@ for iter = 1:maxiterations
             plot(perr);
             xlim([1 numel(perr)]);
             title('proberr');
+			drawnow;
         end
 
 
