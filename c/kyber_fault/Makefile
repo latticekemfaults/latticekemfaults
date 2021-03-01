@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -march=native -mtune=native -O3 -fomit-frame-pointer -DKYBER_K=$(KYBER_K)
 
 CXX = g++
-CXXFLAGS = $(CFLAGS) -std=c++0x
+CXXFLAGS = $(CFLAGS) -std=c++11 -g3 -O0
 
 KSRCFOLDER = kyber
 KSOURCES = aes256ctr.c cbd.c fips202.c indcpa.c kem.c kex.c ntt.c poly.c polyvec.c randombytes.c reduce.c sha256.c sha512.c symmetric-fips202.c verify.c

@@ -21,13 +21,14 @@ int16_t center(uint16_t x){
 	return v;
 }
 
-void print_coeff(FILE *fp, uint16_t coeff, bool flip)
+void print_coeff(FILE *fp, uint16_t coeff, bool flip, bool space)
 {
-  fprintf(fp, " ");
   int16_t c = center(coeff);
   if(flip)
 	  c = -c;
   fprintf(fp, "%d", c);
+  if(space)
+	fprintf(fp, " ");
 }
 
 
@@ -145,16 +146,16 @@ void
 print_linear_coeffs(FILE *fd, const poly *r, const poly *e_1, const int16_t coeff)
 {
   for (int16_t i = 0; i < coeff + 1; i++)
-    print_coeff(fd, r->coeffs[coeff - i], false);
+    print_coeff(fd, r->coeffs[coeff - i], false, i != NEWHOPE_N-1);
 
   for (int16_t i = coeff + 1; i < NEWHOPE_N; i++)
-    print_coeff(fd, r->coeffs[NEWHOPE_N + coeff - i], true);
+    print_coeff(fd, r->coeffs[NEWHOPE_N + coeff - i], true, i != NEWHOPE_N-1);
 
   for (int16_t i = 0; i < coeff + 1; i++)
-    print_coeff(fd, e_1->coeffs[coeff - i], true);
+    print_coeff(fd, e_1->coeffs[coeff - i], true, i != NEWHOPE_N-1);
 
   for (int16_t i = coeff + 1; i < NEWHOPE_N; i++)
-    print_coeff(fd, e_1->coeffs[NEWHOPE_N + coeff - i], false);
+    print_coeff(fd, e_1->coeffs[NEWHOPE_N + coeff - i], false, i != NEWHOPE_N-1);
 }
 
 void
@@ -257,9 +258,9 @@ int generate_system(int numfaults, int target_coefficient, int filter){
   poly_invntt(&s);
 
   for (int i = 0; i < NEWHOPE_N; i++)
-	print_coeff(ineqs_es, e.coeffs[i], 0);
+	print_coeff(ineqs_es, e.coeffs[i], 0, i != NEWHOPE_N-1);
   for (int i = 0; i < NEWHOPE_N; i++)
-	print_coeff(ineqs_es, s.coeffs[i], 0);
+	print_coeff(ineqs_es, s.coeffs[i], 0, i != NEWHOPE_N-1);
   fprintf(ineqs_es, "\n");
 
   // Encrypt message msg
