@@ -135,7 +135,11 @@ else
     %     f2 = 'fixed_es.txt';
     end
     
-    d = readtable(['test_data/', f1], 'FileType', 'text', 'ReadVariableNames', false, 'MultipleDelimsAsOne', true, 'HeaderLines', 0);
+    if verLessThan('matlab', '9.8') %behavior of readtable changed in R2020a
+        d = readtable(['test_data/', f1], 'FileType', 'text', 'ReadVariableNames', false, 'MultipleDelimsAsOne', true, 'HeaderLines', 0, 'Delimiter', ' ');
+    else
+        d = readtable(['test_data/', f1], 'FileType', 'text', 'ReadVariableNames', false, 'MultipleDelimsAsOne', true, 'HeaderLines', 0, 'Format', 'auto');
+    end
     l = table2array(d(:, 1:end-2));
     left = strcmp(table2cell(d(:, end-1)), '<')';
     cutoff = table2array(d(:, end))';
