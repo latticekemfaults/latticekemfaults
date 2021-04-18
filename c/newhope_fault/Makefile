@@ -1,5 +1,5 @@
 CC = /usr/bin/gcc
-LDFLAGS = -lcrypto
+LDFLAGS = 
 CCFLAGS = -O3
 
 #MAIN = PQCgenKAT_kem.c

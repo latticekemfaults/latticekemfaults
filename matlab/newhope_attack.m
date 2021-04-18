@@ -1,31 +1,28 @@
 %% choose parameter set and attack settings
-
- %#ok<*UNRCH>
  
+% controls the number of faults used in the simulations. When an array is specified, then the analysis is repeated for each specified fault number (sweep).
+faultrange = 9000:500:19000;%newhope512
+faultrange =  15000; %for demonstration, only a single fault quantity is considered
+
+maxiterations = 10; %maximum number of iterations of the solving algorithm
+
+repeats = 1; %number of repeats of the entire analysis. Setting higher numbers allows to determine a success rate
+
+plots = true; %switch on plots (evolution of the probability of key coefficients)
+store = false; %if true, then simulation results are stored in results.mat. Needed for sweeps and success rate computation.
+
+%exclusion and filtering stuff 
+err_threshold = 0.01; % determines the "aggresiveness" discarding key guesses. Only important in conjunction with cluster merging (key guesses are not discarded if merging is deactivated).
+domerge = true; % controls merging of clusters. If false, then clusters are not merged and stay the same for the entire run
+mergethreshold = 1000; % maximum number of allowed key guesses per cluster
+
+errate = 0; %allows to introduce an additional error in the (simulated) data. Example: errate=0.01 flips 1% of the inequalities, i.e., makes them incorrect.
+
 kyber = 512; %this script was adapated from the attack on Kyber. For this reason, there are still some references to Kyber here
 n = 2;
 
-faultrange = 9000:500:19000;%newhope512
-faultrange =  15000; %for demonstration
-numfaults = 15000;
-maxiterations = 10;
-
-repeats = 1;
-
-%exclusion and filtering stuff
-err_threshold = 0.01;
-domerge = true;
-mergethreshold = 1000;
-
-% errate = 0.01;
-errate = 0;
-
-plots = true;
-store = false;
-
-%%
-
-
+%% some initialization
+ %#ok<*UNRCH>
 successes = false(numel(faultrange), repeats);
 iterations = zeros(size(successes));
 firsterror_best = zeros(size(successes));
@@ -43,6 +40,15 @@ valsx = vals - vals(1);
 pbino = binopdf(valsx, 2*eta, 0.5);
 
 binoentropy = -sum(pbino.*log2(pbino));
+
+
+%% prepare error simulations
+if ~exist('newhope512_fault', 'file')
+    fprintf('Simulation program not found, compiling...\n');
+    system('cd ../c/newhope_fault;make -B');
+    movefile('../c/newhope_fault/newhope*_fault', '.');
+    fprintf('Compiled and moved to current directory\n');
+end
 
 %% sweep start
 for sweep_repeat = 1:repeats
